@@ -1,0 +1,7 @@
+lxml import html
+requests
+pandas
+numpy
+streamlit 
+time  
+plotly.express 
