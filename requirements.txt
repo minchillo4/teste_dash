@@ -3,5 +3,4 @@ requests
 pandas
 numpy
 streamlit 
-time  
 plotly.express 
