@@ -1,4 +1,4 @@
-lxml import html
+lxml
 requests
 pandas
 numpy
