@@ -6,7 +6,8 @@ import streamlit as st  # 🎈 data web app development
 import time  
 import plotly.express as px  # interactive charts
 
-moedas = ["ripple", 
+moedas = [
+"ripple", 
 "cosmos", 
 "algorand", 
 "celo", 
@@ -28,9 +29,25 @@ moedas = ["ripple",
 'filecoin',
 'lido-dao',
 'helium',
-'gmx'
+'gmx',
+'chiliz',
+'tron',
+'ethereum',
+'near',
+'enjincoin',
+'cardano',
+'shiba-inu',
+'gala',
+'avalanche-2',
+'ftx-token',
+'neo',
+'kusama',
+'ravencoin',
+'flow',
+'pancakeswap-token'
 ]
-categorias = ["Pagamento", 
+categorias = [
+"Pagamento", 
 "Layer 0", 
 "Layer 1", 
 "Layer 1", 
@@ -44,6 +61,21 @@ categorias = ["Pagamento",
 "Layer 1", 
 "Layer 1", 
 "Layer 1",
+'Layer 1',
+'Layer 1',
+'Layer 1',
+'Layer 1',
+'Layer 1',
+'Layer 1',
+'Layer 1',
+'Layer 1',
+'Layer 1',
+'Layer 1',
+'Layer 1',
+'Layer 1',
+'Layer 1',
+'Layer 1',
+'Layer 1',
 'Layer 1',
 'Layer 1',
 'Layer 1',
@@ -98,6 +130,7 @@ def get_coin_change():
     result['30d'] = result['30d'].str.rstrip('%').astype('float') / 100.0
     result['Moeda_i'] = result['moeda']
     result.set_index('Moeda_i', inplace=True)
+    time.sleep(1.5)
     return result
 
 df = get_coin_change()
