@@ -20,31 +20,28 @@ moedas = [
 "theta-token", 
 "havven", 
 "uniswap", 
-"curve-dao-token",
-'polkadot',
-'chainlink',
-'solana',
-'optimism',
-'bitcoin',
-'filecoin',
-'lido-dao',
-'helium',
-'gmx',
-'chiliz',
-'tron',
-'ethereum',
-'near',
-'enjincoin',
-'cardano',
-'shiba-inu',
-'gala',
-'avalanche-2',
-'ftx-token',
-'neo',
-'kusama',
-'ravencoin',
-'flow',
-'pancakeswap-token'
+"curve-dao-token", 
+"polkadot", 
+"solana", 
+"optimism", 
+"bitcoin", 
+"lido-dao", 
+"gmx", 
+"chiliz", 
+"tron", 
+"ethereum", 
+"near", 
+"enjincoin", 
+"cardano", 
+"shiba-inu", 
+"gala", 
+"avalanche-2", 
+"ftx-token", 
+"neo", 
+"kusama", 
+"ravencoin", 
+"flow", 
+"pancakeswap-token"
 ]
 categorias = [
 "Pagamento", 
@@ -54,37 +51,34 @@ categorias = [
 "GameFi", 
 "Layer 1", 
 "Layer 1", 
+"DeFi", 
+"Pagamento", 
+"Layer 2", 
+"Layer 1", 
+"Layer 1", 
+"DeFi", 
+"DeFi", 
+"Layer 0", 
+"Layer 1", 
+"Layer 2", 
+"Pagamento", 
+"DeFi", 
+"DeFi", 
+"GameFi", 
 "Layer 1", 
 "Layer 1", 
 "Layer 1", 
+"GameFi", 
+"Layer 1", 
+"Pagamento", 
+"GameFi", 
+"Layer 1", 
+"DeFi", 
+"Layer 1", 
+"DeFi", 
 "Layer 1", 
 "Layer 1", 
-"Layer 1", 
-"Layer 1",
-'Layer 1',
-'Layer 1',
-'Layer 1',
-'Layer 1',
-'Layer 1',
-'Layer 1',
-'Layer 1',
-'Layer 1',
-'Layer 1',
-'Layer 1',
-'Layer 1',
-'Layer 1',
-'Layer 1',
-'Layer 1',
-'Layer 1',
-'Layer 1',
-'Layer 1',
-'Layer 1',
-'Layer 1',
-'Layer 1',
-'Layer 1',
-'Layer 1',
-'Layer 1',
-'Layer 1'
+"DeFi"
 ]
 var1 = []
 var2 = []
@@ -107,31 +101,34 @@ def is_what_percent_of(num_a, num_b):
 
 @st.experimental_memo
 def get_coin_change():
-    for c in moedas:
-        
-        page = requests.get(f"https://www.coingecko.com/en/coins/{c}")
-        tree = html.fromstring(page.content)
-        p_7 = tree.xpath('//*[@id="general"]/div[1]/div[1]/div[3]/div[2]/div[3]/span/text()')[0]
-        p_30 = tree.xpath('//*[@id="general"]/div[1]/div[1]/div[3]/div[2]/div[5]/span/text()')[0]
-        var1.append(p_7)
-        var2.append(p_30)
-        var3.append(c)
+    try:
+        for c in moedas:
+            
+            page = requests.get(f"https://www.coingecko.com/en/coins/{c}")
+            tree = html.fromstring(page.content)
+            p_7 = tree.xpath('//*[@id="general"]/div[1]/div[1]/div[3]/div[2]/div[3]/span/text()')[0]
+            p_30 = tree.xpath('//*[@id="general"]/div[1]/div[1]/div[3]/div[2]/div[5]/span/text()')[0]
+            var1.append(p_7)
+            var2.append(p_30)
+            var3.append(c)
 
-    serie_1 = pd.Series(var1)
-    serie_2 = pd.Series(var2)
-    serie_3 = pd.Series(var3)
-    serie_4 = np.array(categorias)
+        serie_1 = pd.Series(var1)
+        serie_2 = pd.Series(var2)
+        serie_3 = pd.Series(var3)
+        serie_4 = np.array(categorias)
 
-    frame = { '7d': serie_1,
-    '30d': serie_2,'moeda':serie_3,'cat':serie_4}
+        frame = { '7d': serie_1,
+        '30d': serie_2,'moeda':serie_3,'cat':serie_4}
 
-    result = pd.DataFrame(frame)
-    result['7d'] = result['7d'].str.rstrip('%').astype('float') / 100.0
-    result['30d'] = result['30d'].str.rstrip('%').astype('float') / 100.0
-    result['Moeda_i'] = result['moeda']
-    result.set_index('Moeda_i', inplace=True)
-    time.sleep(1.5)
-    return result
+        result = pd.DataFrame(frame)
+        result['7d'] = result['7d'].str.rstrip('%').astype('float') / 100.0
+        result['30d'] = result['30d'].str.rstrip('%').astype('float') / 100.0
+        result['Moeda_i'] = result['moeda']
+        result.set_index('Moeda_i', inplace=True)
+        return result
+        time.sleep(3)
+    except:
+        print('error')
 
 df = get_coin_change()
 
