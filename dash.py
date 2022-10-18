@@ -41,7 +41,21 @@ moedas = [
 "kusama", 
 "ravencoin", 
 "flow", 
-"pancakeswap-token"
+"pancakeswap-token",
+"chainlink",
+"filecoin",
+"arweave",
+"immutable-x",
+"metis-token",
+"maker",
+"loopring",
+"dydx",
+"the-graph",
+"helium",
+"euler",
+"balancer",
+"nexus-mutual",
+"ethereum-name-service"
 ]
 categorias = [
 "Pagamento", 
@@ -78,7 +92,21 @@ categorias = [
 "DeFi", 
 "Layer 1", 
 "Layer 1", 
-"DeFi"
+"DeFi",
+"Oráculo",
+"Armazenamento",
+"Armazenamento",
+"Layer 2",
+"Layer 2",
+"DeFi",
+"Layer 2",
+"Layer 2",
+"Infraestrutura",
+"Infraestrutura",
+"DeFi",
+"DeFi",
+"Outros",
+"Outros"
 ]
 var1 = []
 var2 = []
@@ -118,12 +146,12 @@ def get_coin_change():
         serie_4 = np.array(categorias)
 
         frame = { '7d': serie_1,
-        '30d': serie_2,'moeda':serie_3,'cat':serie_4}
+        '30d': serie_2,'Moeda':serie_3,'Categoria':serie_4}
 
         result = pd.DataFrame(frame)
         result['7d'] = result['7d'].str.rstrip('%').astype('float') / 100.0
         result['30d'] = result['30d'].str.rstrip('%').astype('float') / 100.0
-        result['Moeda_i'] = result['moeda']
+        result['Moeda_i'] = result['Moeda']
         result.set_index('Moeda_i', inplace=True)
         return result
         time.sleep(3)
@@ -146,10 +174,10 @@ st.title("Crypto Overview")
 placeholder = st.empty()
 
 # dataframe filter
-destaque_pst_7d = f"{df.loc[df['7d'].idxmax(), 'moeda']}"
-destaque_ngt_7d = f"{df.loc[df['7d'].idxmin(), 'moeda']}"
-destaque_pst_30d = f"{df.loc[df['30d'].idxmax(), 'moeda']}"
-destaque_ngt_30d = f"{df.loc[df['30d'].idxmin(), 'moeda']}"
+destaque_pst_7d = f"{df.loc[df['7d'].idxmax(), 'Moeda']}"
+destaque_ngt_7d = f"{df.loc[df['7d'].idxmin(), 'Moeda']}"
+destaque_pst_30d = f"{df.loc[df['30d'].idxmax(), 'Moeda']}"
+destaque_ngt_30d = f"{df.loc[df['30d'].idxmin(), 'Moeda']}"
 # near real-time / live feed simulation
 for seconds in range(200):
     maior_semana = ('{:,.2%}'.format(df["7d"].max()))
@@ -186,14 +214,14 @@ escolha_cat,  = st.columns([1])
 with escolha_cat:
     escolher_catego = st.selectbox(
         "Selecione o setor",
-        ("Todos", "Pagamento", "DeFi", "Metaverso", "GameFi", "Layer 0", "Layer 1", "Layer 2"),
+        ("Todos", "Pagamento", "DeFi", "Metaverso", "GameFi", "Layer 0", "Layer 1", "Layer 2","Oráculo","Armazenamento","Infraestrutura","Outros"),
     )
     if escolher_catego != "Todos":
-        df = df[df['cat'] == escolher_catego]
+        df = df[df["Categoria"] == escolher_catego]
 
 
     fig = px.bar(
-    data_frame=df, y="7d", x="moeda",
+    data_frame=df, y="7d", x="Moeda",
     )
     fig.update_layout(yaxis_tickformat = '.2%', )
     fig.update_traces(marker_color='rgb(223, 208, 134)')
@@ -201,7 +229,7 @@ with escolha_cat:
 
 
     fig2 = px.bar(
-    data_frame=df, x="moeda", y="30d")
+    data_frame=df, x="Moeda", y="30d")
     fig2.update_layout(yaxis_tickformat = '.2%')
     fig.update_traces(marker_color='rgb(223, 208, 134)')
     fig2.update_traces(marker_color='rgb(223, 208, 134)')
