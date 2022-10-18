@@ -1,3 +1,4 @@
+from tkinter import Image
 from lxml import html
 import requests
 import pandas as pd
@@ -5,6 +6,7 @@ import numpy as np
 import streamlit as st  # 🎈 data web app development
 import time  
 import plotly.express as px  # interactive charts
+from PIL import Image
 
 moedas = [
 "ripple", 
@@ -112,14 +114,15 @@ var1 = []
 var2 = []
 var3 = []
 var4 =[]
+im = Image.open('favicon.ico')
 
 def is_what_percent_of(num_a, num_b):
     return ((num_a - num_b) / num_b) * 100
 
     
 st.set_page_config(
-    page_title="Real-Time Data Science Dashboard",
-    page_icon="✅",
+    page_title="Titanium Crypto Overview",
+    page_icon=im,
     layout="wide",
 )
 
