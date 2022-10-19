@@ -1,3 +1,4 @@
+#from tkinter import Image
 from lxml import html
 import requests
 import pandas as pd
@@ -113,6 +114,7 @@ var1 = []
 var2 = []
 var3 = []
 var4 =[]
+var5 = []
 im = Image.open('favicon.ico')
 
 def is_what_percent_of(num_a, num_b):
@@ -138,25 +140,27 @@ def get_coin_change():
             tree = html.fromstring(page.content)
             p_7 = tree.xpath('//*[@id="general"]/div[1]/div[1]/div[3]/div[2]/div[3]/span/text()')[0]
             p_30 = tree.xpath('//*[@id="general"]/div[1]/div[1]/div[3]/div[2]/div[5]/span/text()')[0]
+            p_1 = tree.xpath('//*[@id="general"]/div[1]/div[1]/div[3]/div[2]/div[2]/span/text()')[0]
             var1.append(p_7)
             var2.append(p_30)
             var3.append(c)
+            var5.append(p_1)
 
         serie_1 = pd.Series(var1)
         serie_2 = pd.Series(var2)
         serie_3 = pd.Series(var3)
         serie_4 = np.array(categorias)
+        serie_5 = pd.Series(var5)
 
-        frame = { '7d': serie_1,
-        '30d': serie_2,'Moeda':serie_3,'Categoria':serie_4}
+        frame = {'Moeda':serie_3,'1d':serie_5,'7d': serie_1,'30d': serie_2,'Categoria':serie_4}
 
         result = pd.DataFrame(frame)
         result['7d'] = result['7d'].str.rstrip('%').astype('float') / 100.0
         result['30d'] = result['30d'].str.rstrip('%').astype('float') / 100.0
+        result['1d'] = result['1d'].str.rstrip('%').astype('float') / 100.0
         result['Moeda_i'] = result['Moeda']
         result.set_index('Moeda_i', inplace=True)
         return result
-        time.sleep(3)
     except:
         print('error')
 
@@ -191,7 +195,7 @@ for seconds in range(200):
         
         kpi1.metric(
             label=f"Destaque Positivo (7d): {destaque_pst_7d}",
-            value=maior_semana
+            value= f"+{maior_semana}"
         )
     
         kpi2.metric(
@@ -201,7 +205,7 @@ for seconds in range(200):
     
         kpi3.metric(
             label=f"Destaque Positivo(30d): {destaque_pst_30d}",
-            value=maior_mes
+            value=f"+{maior_mes}"
         )
 
         kpi4.metric(
@@ -222,21 +226,39 @@ with escolha_cat:
         df = df[df["Categoria"] == escolher_catego]
 
 
-    fig = px.bar(
+    fig0 = px.bar(
+    data_frame=df, y="1d", x="Moeda",
+    )
+    fig0.update_layout(yaxis_tickformat = '.2%', )
+    fig0.update_traces(marker_color='rgb(223, 208, 134)')
+    fig0.update_xaxes(tickangle=90)
+
+    st.plotly_chart(fig0, use_container_width=True)
+  
+    
+    
+    
+    fig1 = px.bar(
     data_frame=df, y="7d", x="Moeda",
     )
-    fig.update_layout(yaxis_tickformat = '.2%', )
-    fig.update_traces(marker_color='rgb(223, 208, 134)')
-    st.plotly_chart(fig, use_container_width=True)
+    fig1.update_layout(yaxis_tickformat = '.2%', )
+    fig1.update_traces(marker_color='rgb(223, 208, 134)')
+    fig1.update_xaxes(tickangle=90)
+    st.plotly_chart(fig1, use_container_width=True)
 
 
     fig2 = px.bar(
     data_frame=df, x="Moeda", y="30d")
     fig2.update_layout(yaxis_tickformat = '.2%')
-    fig.update_traces(marker_color='rgb(223, 208, 134)')
+    fig1.update_traces(marker_color='rgb(223, 208, 134)')
     fig2.update_traces(marker_color='rgb(223, 208, 134)')
+    fig2.update_xaxes(tickangle=90)
     st.plotly_chart(fig2, use_container_width=True)
+    
+    
+   
 
     st.markdown("Cotação Cripto")
-    st.dataframe(df)
+    filter_df = df.style.format({'7d':'{:.2%}','30d':'{:.2%}','1d':'{:.2%}'}).hide(axis='index')
+    st.dataframe(filter_df)
     time.sleep(1)
