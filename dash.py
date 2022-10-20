@@ -19,7 +19,7 @@ apelidos = [
 "Nexo", 
 "Polygon", 
 "Theta", 
-"Havven", 
+"Decentraland", 
 "Uniswap", 
 "Curve", 
 "Polkadot", 
@@ -71,7 +71,7 @@ moedas = [
 "nexo", 
 "matic-network", 
 "theta-token", 
-"havven", 
+"decentraland", 
 "uniswap", 
 "curve-dao-token", 
 "polkadot", 
@@ -115,7 +115,7 @@ categorias = [
 "Layer 0", 
 "Layer 1", 
 "Layer 1", 
-"GameFi", 
+"GameFi/Metaverso", 
 "Layer 1", 
 "Layer 1", 
 "DeFi", 
@@ -131,14 +131,14 @@ categorias = [
 "Pagamento", 
 "DeFi", 
 "DeFi", 
-"GameFi", 
+"GameFi/Metaverso", 
 "Layer 1", 
 "Layer 1", 
 "Layer 1", 
-"GameFi", 
+"GameFi/Metaverso", 
 "Layer 1", 
 "Pagamento", 
-"GameFi", 
+"GameFi/Metaverso", 
 "Layer 1", 
 "DeFi", 
 "Layer 1", 
@@ -195,13 +195,12 @@ def get_coin_change():
             p_30 = tree.xpath('//*[@id="general"]/div[1]/div[1]/div[3]/div[2]/div[5]/span/text()')[0]
             p_1 = tree.xpath('//*[@id="general"]/div[1]/div[1]/div[3]/div[2]/div[2]/span/text()')[0]
             ticker = tree.xpath('///*[@id="conversion-calculator"]/div[2]/div[1]/span/text()')[0]
-            #price_usd = tree.xpath('/html/body/div[5]/div[5]/div[1]/div/div[1]/div[2]/div/text()')[0]
             var1.append(p_7)
             var2.append(p_30)
             var3.append(c)
             var5.append(p_1)
             var6.append(ticker)
-            #var7.append(price_usd)
+            
             
             
 
@@ -214,7 +213,7 @@ def get_coin_change():
         serie_6 = pd.Series(var6)
         serie_7 = np.array(apelidos)
 
-        frame = {'Symbol':serie_6,'Moeda':serie_3,'1d':serie_5,'7d': serie_1,'30d': serie_2,'Categoria':serie_4,'Teste':serie_7}
+        frame = {'Symbol':serie_6,'Moeda':serie_3,'1d':serie_5,'7d': serie_1,'30d': serie_2,'Categoria':serie_4,'Nome':serie_7}
 
         result = pd.DataFrame(frame)
         result['7d'] = result['7d'].str.rstrip('%').astype('float') / 100.0
@@ -242,12 +241,12 @@ st.title("Crypto Overview")
 placeholder = st.empty()
 
 # dataframe filter
-destaque_pst_1d = f"{df.loc[df['1d'].idxmax(), 'Teste']}" 
-destaque_ngt_1d = f"{df.loc[df['1d'].idxmin(), 'Teste']}" 
-destaque_pst_7d = f"{df.loc[df['7d'].idxmax(), 'Teste']}"
-destaque_ngt_7d = f"{df.loc[df['7d'].idxmin(), 'Teste']}"
-destaque_pst_30d = f"{df.loc[df['30d'].idxmax(), 'Teste']}"
-destaque_ngt_30d = f"{df.loc[df['30d'].idxmin(), 'Teste']}"
+destaque_pst_1d = f"{df.loc[df['1d'].idxmax(), 'Nome']}" 
+destaque_ngt_1d = f"{df.loc[df['1d'].idxmin(), 'Nome']}" 
+destaque_pst_7d = f"{df.loc[df['7d'].idxmax(), 'Nome']}"
+destaque_ngt_7d = f"{df.loc[df['7d'].idxmin(), 'Nome']}"
+destaque_pst_30d = f"{df.loc[df['30d'].idxmax(), 'Nome']}"
+destaque_ngt_30d = f"{df.loc[df['30d'].idxmin(), 'Nome']}"
 # near real-time / live feed simulation
 for seconds in range(200):
     maior_dia = ('{:,.2%}'.format(df["1d"].max()))
@@ -300,17 +299,16 @@ escolha_cat,  = st.columns([1])
 with escolha_cat:
     escolher_catego = st.selectbox(
         "Selecione o setor",
-        ("Todos", "Pagamento", "DeFi", "Metaverso", "GameFi", "Layer 0", "Layer 1", "Layer 2","Oráculo","Armazenamento","Infraestrutura","Outros"),
+        ("Todos", "Pagamento", "DeFi", "GameFi/Metaverso", "Layer 0", "Layer 1", "Layer 2","Oráculo","Armazenamento","Infraestrutura"),
     )
     if escolher_catego != "Todos":
         df = df[df["Categoria"] == escolher_catego]
 
-
+    
     fig0 = px.bar(
-    data_frame=df, y="1d", x="Symbol",
-    )
-    fig0.update_layout(yaxis_tickformat = '.2%', )
-    fig0.update_traces(marker_color='rgb(223, 208, 134)')
+    data_frame=df, y="1d", x="Symbol",title="Variação (1d)",height = 700, color="1d", range_color=[-0.02, 0.02], color_continuous_scale=['rgb(100,0,0)','rgb(6,41,0)'])
+    fig0.update_layout(yaxis_tickformat = '.2%', xaxis_title=" ")
+    fig0.update_traces(hovertemplate='Variação: %{y}')
     fig0.update_xaxes(tickangle=-60)
 
     st.plotly_chart(fig0, use_container_width=True)
@@ -318,21 +316,20 @@ with escolha_cat:
     
     
     
-    fig1 = px.bar(
-    data_frame=df, y="7d", x="Symbol",
+    fig1 = px.bar(          
+    data_frame=df, y="7d", x="Symbol",title="Variação (7d)", color='7d', range_color=[-0.05, 0.02], color_continuous_scale=['rgb(100,0,0)','rgb(6,41,0)']
     )
-    fig1.update_layout(yaxis_tickformat = '.2%', )
-    fig1.update_traces(marker_color='rgb(223, 208, 134)')
+    fig1.update_layout(yaxis_tickformat = '.2%', xaxis_title=" ",height = 700)
+    fig1.update_traces(hovertemplate='Variação: %{y}')
     fig1.update_xaxes(tickangle=-60)
     #fig1.update_yaxes(visible=False, showticklabels=False)
     st.plotly_chart(fig1, use_container_width=True)
 
 
     fig2 = px.bar(
-    data_frame=df, x="Symbol", y="30d")
-    fig2.update_layout(yaxis_tickformat = '.2%')
-    fig1.update_traces(marker_color='rgb(223, 208, 134)')
-    fig2.update_traces(marker_color='rgb(223, 208, 134)')
+    data_frame=df, x="Symbol", y="30d",title="Variação (30d)",height = 700,range_color=[-0.05, 0.02], color_continuous_scale=['rgb(100,0,0)','rgb(6,41,0)'],color="30d")
+    fig2.update_layout(yaxis_tickformat = '.2%',xaxis_title=" ")
+    fig2.update_traces(hovertemplate='Variação: %{y}')
     fig2.update_xaxes(tickangle=-60)
     st.plotly_chart(fig2, use_container_width=True)
     
@@ -343,4 +340,4 @@ with escolha_cat:
     filter_df = df.style.format({'7d':'{:.2%}','30d':'{:.2%}','1d':'{:.2%}'}).hide(axis='index')
     st.dataframe(filter_df)
     time.sleep(1)
-    print(var7)
+    
