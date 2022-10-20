@@ -1,4 +1,3 @@
-#from tkinter import Image
 from lxml import html
 import requests
 import pandas as pd
