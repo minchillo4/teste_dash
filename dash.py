@@ -8,6 +8,7 @@ import plotly.express as px  # interactive charts
 from PIL import Image
 
 apelidos = [
+"Aave",
 "Ripple", 
 "Cosmos", 
 "Algorand", 
@@ -60,6 +61,7 @@ apelidos = [
 ]
 
 moedas = [
+"aave",
 "ripple", 
 "cosmos", 
 "algorand", 
@@ -111,6 +113,7 @@ moedas = [
 "ethereum-name-service"
 ]
 categorias = [
+"DeFi",
 "Pagamento", 
 "Layer 0", 
 "Layer 1", 
