@@ -311,7 +311,7 @@ with escolha_cat:
     fig0 = px.bar(
     data_frame=df, y="1d", x="Symbol",title="Variação (1d)",height = 700, color="1d", range_color=[-0.02, 0.02], color_continuous_scale=['rgb(100,0,0)','rgb(6,41,0)'])
     fig0.update_layout(yaxis_tickformat = '.2%', xaxis_title=" ")
-    fig0.update_traces(hovertemplate='Variação: %{y}')
+    fig0.update_traces(hovertemplate=  'Variação: %{y}<br>Moeda: %{x}')
     fig0.update_xaxes(tickangle=-60)
 
     st.plotly_chart(fig0, use_container_width=True)
