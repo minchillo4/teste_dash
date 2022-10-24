@@ -235,7 +235,7 @@ col1, col2, col3 = st.columns([14, 5, 15])
 with col2:
     st.image("logo.png", width=225)
 
-st.title("Crypto Overview")
+st.title("Titanium Market Monitor")
 
 
 # top-level filters
