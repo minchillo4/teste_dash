@@ -170,7 +170,7 @@ var3 = []
 var4 =[]
 var5 = []
 var6 = []
-var7 =[]
+var7 = []
 im = Image.open('favicon.ico')
 
 def is_what_percent_of(num_a, num_b):
@@ -223,6 +223,7 @@ def get_coin_change():
         result['30d'] = result['30d'].str.rstrip('%').astype('float') / 100.0
         result['1d'] = result['1d'].str.rstrip('%').astype('float') / 100.0
         result['Moeda_i'] = result['Moeda']
+        result['Name&Symb'] = result['Nome'] + '(' + result['Symbol'] + ')'
         result.set_index('Moeda_i', inplace=True)
         return result
     except:
@@ -244,14 +245,14 @@ st.title("Crypto Overview")
 placeholder = st.empty()
 
 # dataframe filter
-destaque_pst_1d = f"{df.loc[df['1d'].idxmax(), 'Nome']}" 
-destaque_ngt_1d = f"{df.loc[df['1d'].idxmin(), 'Nome']}" 
-destaque_pst_7d = f"{df.loc[df['7d'].idxmax(), 'Nome']}"
-destaque_ngt_7d = f"{df.loc[df['7d'].idxmin(), 'Nome']}"
-destaque_pst_30d = f"{df.loc[df['30d'].idxmax(), 'Nome']}"
-destaque_ngt_30d = f"{df.loc[df['30d'].idxmin(), 'Nome']}"
+destaque_pst_1d = f"{df.loc[df['1d'].idxmax(), 'Name&Symb']}" 
+destaque_ngt_1d = f"{df.loc[df['1d'].idxmin(), 'Name&Symb']}" 
+destaque_pst_7d = f"{df.loc[df['7d'].idxmax(), 'Name&Symb']}"
+destaque_ngt_7d = f"{df.loc[df['7d'].idxmin(), 'Name&Symb']}"
+destaque_pst_30d = f"{df.loc[df['30d'].idxmax(), 'Name&Symb']}"
+destaque_ngt_30d = f"{df.loc[df['30d'].idxmin(), 'Name&Symb']}"
 # near real-time / live feed simulation
-for seconds in range(5000):
+for seconds in range(200):
     maior_dia = ('{:,.2%}'.format(df["1d"].max()))
     menor_dia = ('{:,.2%}'.format(df["1d"].min()))
     maior_semana = ('{:,.2%}'.format(df["7d"].max()))
@@ -260,37 +261,39 @@ for seconds in range(5000):
     menor_mes =    ('{:,.2%}'.format(df["30d"].min()))
     with placeholder.container():
         kpi1, kpi2, kpi3, kpi4, kpi5, kpi6 = st.columns(6)
+
+        st.markdown("""<style>[data-testid="stMetricValue"] {font-size: 25px;}</style>""",unsafe_allow_html=True,)
         
         kpi1.metric(
-            label=f"Destaque Positivo (1d):",
+            label=f"Best Performance (1d):",
             value= destaque_pst_1d,
             delta = maior_dia
         )
     
         kpi2.metric(
-            label=f"Destaque Negativo (1d):",
+            label=f"Worst Performance (1d):",
             value= destaque_ngt_1d,
             delta = menor_dia
         )
     
         kpi3.metric(
-            label=f"Destaque Positivo (7d):",
+            label=f"Best Performance (7d):",
             value= destaque_pst_7d,
             delta = maior_semana
         )
 
         kpi4.metric(
-            label=f"Destaque Negativo (7d):",
+            label=f"Worst Performance (7d):",
             value=destaque_ngt_7d,
             delta = menor_semana
         )
         kpi5.metric(
-            label=f"Destaque Positivo (30d):",
+            label=f"Best Performance (30d):",
             value=destaque_pst_30d,
             delta=maior_mes
         )
         kpi6.metric(
-            label=f"Destaque Negativo (30d):",
+            label=f"Worst Performance (30d):",
             value=destaque_ngt_30d,
             delta = menor_mes
         )
@@ -301,7 +304,7 @@ escolha_cat,  = st.columns([1])
 
 with escolha_cat:
     escolher_catego = st.selectbox(
-        "Selecione o setor",
+        "Choose a category",
         ("Todos", "Pagamento", "DeFi", "GameFi/Metaverso", "Layer 0", "Layer 1", "Layer 2","Oráculo","Armazenamento","Infraestrutura"),
     )
     if escolher_catego != "Todos":
@@ -309,7 +312,7 @@ with escolha_cat:
 
     
     fig0 = px.bar(
-    data_frame=df, y="1d", x="Symbol",title="Variação (1d)",height = 700, color="1d", range_color=[-0.02, 0.02], color_continuous_scale=['rgb(100,0,0)','rgb(6,41,0)'])
+    data_frame=df, y="1d", x="Symbol",title="Performance (1d)",height = 700, color="1d", range_color=[-0.02, 0.02], color_continuous_scale=['rgb(100,0,0)','rgb(6,41,0)'])
     fig0.update_layout(yaxis_tickformat = '.2%', xaxis_title=" ")
     fig0.update_traces(hovertemplate=  'Variação: %{y}<br>Moeda: %{x}')
     fig0.update_xaxes(tickangle=-60)
@@ -320,27 +323,44 @@ with escolha_cat:
     
     
     fig1 = px.bar(          
-    data_frame=df, y="7d", x="Symbol",title="Variação (7d)", color='7d', range_color=[-0.05, 0.02], color_continuous_scale=['rgb(100,0,0)','rgb(6,41,0)']
+    data_frame=df, y="7d", x="Symbol",title="Performance (7d)", color='7d', range_color=[-0.05, 0.02], color_continuous_scale=['rgb(100,0,0)','rgb(6,41,0)']
     )
     fig1.update_layout(yaxis_tickformat = '.2%', xaxis_title=" ",height = 700)
-    fig1.update_traces(hovertemplate='Variação: %{y}')
+    fig1.update_traces(hovertemplate='Variação: %{y}<br>Moeda: %{x}')
     fig1.update_xaxes(tickangle=-60)
     #fig1.update_yaxes(visible=False, showticklabels=False)
     st.plotly_chart(fig1, use_container_width=True)
 
 
     fig2 = px.bar(
-    data_frame=df, x="Symbol", y="30d",title="Variação (30d)",height = 700,range_color=[-0.05, 0.02], color_continuous_scale=['rgb(100,0,0)','rgb(6,41,0)'],color="30d")
+    data_frame=df, x="Symbol", y="30d",title="Performance (30d)",height = 700,range_color=[-0.05, 0.02], color_continuous_scale=['rgb(100,0,0)','rgb(6,41,0)'],color="30d")
     fig2.update_layout(yaxis_tickformat = '.2%',xaxis_title=" ")
-    fig2.update_traces(hovertemplate='Variação: %{y}')
+    fig2.update_traces(hovertemplate='Variação: %{y}<br>Moeda: %{x}')
     fig2.update_xaxes(tickangle=-60)
     st.plotly_chart(fig2, use_container_width=True)
     
     
    
 
-    st.markdown("Cotação Cripto")
-    filter_df = df.style.format({'7d':'{:.2%}','30d':'{:.2%}','1d':'{:.2%}'}).hide(axis='index')
-    st.dataframe(filter_df)
+    st.markdown("Overview Table")
+
+    new_df = pd.DataFrame()
+    new_df['Symbol'] = df['Symbol']
+    new_df['Nome'] = df['Nome']
+    new_df['Categoria'] = df['Categoria']
+    new_df['1d'] = df['1d']
+    new_df['7d'] = df['7d']
+    new_df['30d'] = df['30d']
+    
+    
+   
+   
+
+    blankIndex=['']*len(new_df)
+    new_df.index=blankIndex
+ 
+    
+  
+    st.dataframe(new_df.style.format({'7d':'{:.2%}','30d':'{:.2%}','1d':'{:.2%}'}))
     time.sleep(1)
     
