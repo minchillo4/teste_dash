@@ -252,7 +252,7 @@ destaque_ngt_7d = f"{df.loc[df['7d'].idxmin(), 'Name&Symb']}"
 destaque_pst_30d = f"{df.loc[df['30d'].idxmax(), 'Name&Symb']}"
 destaque_ngt_30d = f"{df.loc[df['30d'].idxmin(), 'Name&Symb']}"
 # near real-time / live feed simulation
-for seconds in range(5000):
+for seconds in range(20000):
     maior_dia = ('{:,.2%}'.format(df["1d"].max()))
     menor_dia = ('{:,.2%}'.format(df["1d"].min()))
     maior_semana = ('{:,.2%}'.format(df["7d"].max()))
