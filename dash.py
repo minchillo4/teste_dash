@@ -187,7 +187,7 @@ def is_what_percent_of(num_a, num_b):
     return ((num_a - num_b) / num_b) * 100
     
 
-@st.experimental_memo
+@st.cache
 def get_coin_change():
     try:
         for c in moedas:
